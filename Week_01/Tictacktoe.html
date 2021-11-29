@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .cell {
+        width: 100px;
+        height: 100px;
+        background: beige;
+        border: 1px solid red;
+        display: inline-block;
+        font-size: 50px;
+        text-align: center;
+        line-height: 100px;
+        vertical-align: middle;
+    }
+</style>
+
+<body>
+    <div class="board">
+
+    </div>
+</body>
+<script>
+    let pattern = [
+        [1, 0, 0],
+        [0, 2, 0],
+        [0, 0, 0],
+    ]
+    let board = document.querySelector('.board')
+    let color = 1
+
+    // 1、渲染，  1，✅我方  ❎，2对方
+    function render() {
+        board.innerHTML = ''
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                let cell = document.createElement('div');
+                cell.classList.add('cell')
+                cell.innerHTML = pattern[i][j] == 1 ? '✅' :
+                    pattern[i][j] == 2 ? '❎' : ''
+                cell.addEventListener('click', () => stroke(i, j))
+                board.appendChild(cell)
+            }
+            // board.innerHTML += '<br>'  不能这样写，会把dom事件去掉
+            board.appendChild(document.createElement('br'))
+        }
+    }
+    render()
+
+    // 2、落子,
+    function stroke(i, j) {
+        pattern[i][j] = color
+        render()
+        if (check(pattern)) {
+            return alert(color == 1 ? '✅赢了' : '❎赢了');
+        }
+        color = 3 - color// 交替切换
+        if (willWin()) {
+            alert(color == 1 ? '✅将要赢了' : '❎将要赢了');
+        }
+    }
+
+    // 3、判断是否获胜
+    function check(pattern) {
+        // 横行
+        outer: for (let i = 0; i < 3; i++) {
+            let win = true;
+            for (let j = 0; j < 3; j++) {
+                if (pattern[i][j] != color) {
+                    win = false;
+                    continue outer
+                }
+            }
+            if (win) {
+                return true
+            }
+        }
+        // 竖行
+        outer: for (let i = 0; i < 3; i++) {
+            let win = true;
+            for (let j = 0; j < 3; j++) {
+                if (pattern[j][i] != color) {
+                    win = false;
+                    continue outer
+                }
+            }
+            if (win) {
+                return true
+            }
+        }
+
+        // 斜行 ，/
+        {
+            let win = true
+            for (let i = 0; i < 3; i++) {
+                if (pattern[i][i] != color) {
+                    win = false;
+                    continue
+                }
+            }
+            if (win) {
+                return true
+            }
+        }
+
+
+        // 斜行 ，\
+        {
+            let win = true;
+            for (let i = 0; i < 3; i++) {
+                if (pattern[i][2 - i] != color) {
+                    win = false;
+                    continue
+                }
+
+            }
+            if (win) {
+                return true
+            }
+        }
+
+        return false
+
+    }
+
+    // 4、加入Ai判断
+    function willWin() {
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (!pattern[i][j]) {
+                    let patternCopy = JSON.parse(JSON.stringify(pattern))
+                    patternCopy[i][j] = color;
+                    if (check(patternCopy)) {
+                        return true
+                    }
+                }
+            }
+        }
+    }
+
+</script>
+
+</html>
