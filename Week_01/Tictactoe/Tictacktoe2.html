@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .cell {
+        width: 100px;
+        height: 100px;
+        background: beige;
+        border: 1px solid red;
+        display: inline-block;
+        font-size: 50px;
+        text-align: center;
+        line-height: 100px;
+        vertical-align: middle;
+    }
+</style>
+
+<body>
+    <div class="board">
+
+    </div>
+</body>
+<script>
+    /** 人机对战 **/
+    let pattern = [
+        0, 0, 0,
+        0, 1, 0,
+        0, 0, 0,
+    ]
+    let board = document.querySelector('.board')//获取的动态数据，所以可以写到外面
+    let color = 2//当前是我方落子
+
+    // 1、渲染，  1，✅我方  ❎，2对方
+    function render() {
+        // let board = document.querySelector('.board')//写到这里也可以
+        board.innerHTML = ''
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                let cell = document.createElement('div');
+                cell.classList.add('cell')
+                cell.innerText = pattern[i * 3 + j] == 1 ? '✅' :
+                    pattern[i * 3 + j] == 2 ? '❎' : ''
+                cell.addEventListener('click', () => userStroke(i, j))
+                board.appendChild(cell)
+            }
+            // board.innerHTML += '<br>'  不能这样写，会把dom事件去掉
+            board.appendChild(document.createElement('br'))
+        }
+    }
+    render()
+
+    // 2、落子,
+    function userStroke(i, j) {
+        pattern[i * 3 + j] = color
+        render()
+        if (check(pattern, color)) {
+            return alert(color == 1 ? '✅赢了' : '❎赢了');
+        }
+        color = 3 - color// 交替切换
+        console.log(bestChoice(pattern, color));
+        if (willWin(pattern, color)) {
+            console.log(color == 1 ? '✅将要赢了' : '❎将要赢了');
+        }
+        computerStorke()
+    }
+    // 电脑落子
+    function computerStorke() {
+        let choice = bestChoice(pattern, color);
+        if (choice.point)
+            pattern[choice.point[0] * 3 + choice.point[1]] = color;
+        if (check(pattern, color)) {
+            alert(color === 2 ? "❎ is winner!" : "✅ is winner");
+        }
+        color = 3 - color;
+        render();
+    }
+
+    // 3、判断是否获胜
+    function check(pattern, color) {
+        // 横行
+        outer: for (let i = 0; i < 3; i++) {
+            let win = true;
+            for (let j = 0; j < 3; j++) {
+                if (pattern[i * 3 + j] != color) {
+                    win = false;
+                    continue outer
+                }
+            }
+            if (win) {
+                return true
+            }
+        }
+        // 竖行
+        outer: for (let i = 0; i < 3; i++) {
+            let win = true;
+            for (let j = 0; j < 3; j++) {
+                if (pattern[j * 3 + i] != color) {
+                    win = false;
+                    continue outer
+                }
+            }
+            if (win) {
+                return true
+            }
+        }
+
+        // 斜行 ，\
+        {
+            let win = true
+            for (let i = 0; i < 3; i++) {
+                if (pattern[i * 3 + i] != color) {
+                    win = false;
+                    continue
+                }
+            }
+            if (win) {
+                return true
+            }
+        }
+
+
+        // 斜行 ，/ 2,4,6
+        {
+            let win = true;
+            for (let i = 0; i < 3; i++) {
+                if (pattern[i * 3 + 2 - i] != color) {
+                    win = false;
+                    continue
+                }
+
+            }
+            if (win) {
+                return true
+            }
+        }
+
+        return false
+
+    }
+
+    // 4、加入Ai判断
+    function willWin(pattern, color) {
+        // debugger
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (!pattern[i * 3 + j]) {
+                    let temp = clone(pattern);
+                    temp[i * 3 + j] = color;
+                    if (check(temp, color)) {
+                        return [i, j];
+                    }
+                }
+            }
+        }
+        return null
+    }
+
+    function clone(pattern) {
+        return Object.create(pattern)
+    }
+
+    // 能赢就赢，不能赢就随便走一个，然后对方走，对方也是能赢就赢，我对对方的结果取返
+    function bestChoice(pattern, color) {
+        let p = willWin(pattern, color);
+        if (p) {
+            return {
+                point: p,
+                result: 1
+            }
+        }
+        let result = -2;
+        let point = null;
+        outer: for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (pattern[i * 3 + j]) {
+                    continue;
+                }
+                let tmp = clone(pattern);
+                tmp[i * 3 + j] = color;//我走了
+                let r = bestChoice(tmp, 3 - color).result;//对方走
+                // 对方的结果取反，就是我的结果
+                if (-r > result) {
+                    result = -r;//对方的结果取返就是我的结果
+                    point = [i, j];//取我一开始的值
+                }
+                if (result === 1) {
+                    break outer;
+                }
+            }
+        }
+        return {
+            point: point,
+            result: point ? result : 0
+        }
+    }
+    console.log(bestChoice(pattern, color));
+</script>
+
+</html>
