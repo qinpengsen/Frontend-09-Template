@@ -33,12 +33,21 @@
 - querySelector 获取的子元素是动态的
 
 ### 红绿灯 异步编程
-> 红灯5秒，绿灯10秒，黄灯2秒，无限循环
+> 红灯5秒，黄灯2秒，绿灯10秒，无限循环
 
 疑问
 - callback-hell 和 时间处理函数有啥关系？为啥时间处理函数处理红绿灯问题就是callback-hell了？
+    - https://www.freecodecamp.org/news/javascript-callback-functions-what-are-callbacks-in-js-and-how-to-use-them/
+- marign:0 auto 如何使用
+    - 设置宽度，然后margin:0 auto
 - async gennerator 是啥？
+    - 异步的gennerator，可以用来写一下异步代码，看generator.js
 - for await of 是啥？
+    - 和 async gennerator 相对应，用来循环使用
+
+知识点
+- 无限循环最佳实践
+- Genereator 是啥？了解下即可
 
 JavaScript 异步机制
 - callBack

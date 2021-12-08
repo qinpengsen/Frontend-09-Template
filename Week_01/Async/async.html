@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .wrap {
+        display: flex;
+    }
+
+    .red,
+    .green,
+    .yellow {
+        width: 100px;
+        height: 100px;
+        margin: 20px;
+        border-radius: 100%;
+        background: blanchedalmond;
+    }
+
+    .red.lighten {
+        background: red;
+    }
+
+    .yellow.lighten {
+        background: yellow;
+    }
+
+    .green.lighten {
+        background: green;
+    }
+</style>
+
+<body>
+    <div class="wrap">
+        <div class="red"></div>
+        <div class="yellow"></div>
+        <div class="green"></div>
+    </div>
+</body>
+<script>
+    // 红灯5秒，黄灯2秒，绿灯10秒，无限循环,老师写法,可以把灯的控制写成promise，也可以把灯持续的时间写成promise
+    function clearLighten() {
+        document.querySelectorAll('.wrap div').forEach(item => item.classList.remove('lighten'))
+    }
+    function linghtenRed() {
+        let el = document.getElementsByClassName('red')[0];
+        el.classList.add('lighten')
+
+    }
+    function linghtenGreen() {
+        let el = document.getElementsByClassName('green')[0];
+        el.classList.add('lighten')
+
+    }
+    function linghtenYellow() {
+        let el = document.getElementsByClassName('yellow')[0];
+        el.classList.add('lighten')
+
+    }
+
+
+    function sleep(time) {
+        return new Promise(function (resolve, reject) {
+            setTimeout(resolve, time);
+        });
+    }
+
+    // 主要链式调用返回promsise，默认也是返回promise，也可以自己返回promise，或者下面的写法
+    // async function circle() {
+    //     linghtenRed()
+    //     await sleep(5000)
+    //     clearLighten()
+    //     linghtenYellow()
+    //     await sleep(2000)
+    //     clearLighten()
+    //     linghtenGreen()
+    //     await sleep(10000)
+    //     circle()
+    // }
+    // circle()
+
+    // 或者上面的写法,
+    async function circle() {
+
+        while (true) {
+            linghtenRed()
+            await sleep(5000)
+            clearLighten()
+            linghtenYellow()
+            await sleep(2000)
+            clearLighten()
+            linghtenGreen()
+            await sleep(10000)
+        }
+    }
+    circle()
+
+
+</script>
+
+</html>

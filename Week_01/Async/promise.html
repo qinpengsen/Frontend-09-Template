@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .wrap {
+        display: flex;
+        position: absolute;
+    }
+
+    .red,
+    .green,
+    .yellow {
+        width: 100px;
+        height: 100px;
+        margin: 20px;
+        border-radius: 100%;
+        background: blanchedalmond;
+    }
+
+    .red.lighten {
+        background: red;
+    }
+
+    .yellow.lighten {
+        background: yellow;
+    }
+
+    .green.lighten {
+        background: green;
+    }
+</style>
+
+<body>
+    <div class="wrap">
+        <div class="red"></div>
+        <div class="yellow"></div>
+        <div class="green"></div>
+    </div>
+</body>
+<script>
+    // 红灯5秒，黄灯2秒，绿灯10秒，无限循环
+    function clearLighten() {
+        document.querySelectorAll('.wrap div').forEach(item => item.classList.remove('lighten'))
+    }
+   
+
+    function createPromise(cls, time) {
+        document.getElementsByClassName(cls)[0].classList.add('lighten')
+        return new Promise((res, rej) => {
+            setTimeout(() => {
+                res()
+            }, time)
+        })
+    }
+
+    // 主要链式调用返回promsise，默认也是返回promise，也可以自己返回promise
+    function circle() {
+        createPromise('red', 5000).then(() => {
+            clearLighten()
+            return createPromise('yellow', 2000)
+        }).then(() => {
+            clearLighten()
+            return createPromise('green', 10000)
+        }).then(() => {
+            clearLighten()
+            circle()
+        })
+
+    }
+    circle()
+
+
+</script>
+
+</html>

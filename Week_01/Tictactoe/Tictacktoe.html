@@ -173,6 +173,7 @@
                 tmp[i][j] = color;//我走了
                 let r = bestChoice(tmp, 3 - color).result;//对方走
                 // 对方的结果取反，就是我的结果
+                // 可能会有很多次的结果，跟上一次的笔记，若果大于上一次的，取这一次的
                 if (-r > result) {
                     result = -r;//对方的结果取返就是我的结果
                     point = [i, j];//取我一开始的值
