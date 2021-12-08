@@ -6,6 +6,7 @@
 
 **疑问 **
 - dispaly:inline 默认baseline 对齐？  
+    - vertical-align 用在 inline, inline-block and table-cell elements， 默认baselline 对齐，要改成middle对齐
 - 三元表达式最佳实践
 - let声明最佳实践
 - 为啥要重新画一下
@@ -48,7 +49,9 @@
 
 **知识点**
 - 无限循环最佳实践
+    - while true do
 - Genereator 是啥？了解下即可
+    - yield 生成断点，next 来调用
 
 **JavaScript 异步机制**
 - callBack

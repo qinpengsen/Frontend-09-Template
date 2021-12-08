@@ -44,8 +44,8 @@
             for (let j = 0; j < 3; j++) {
                 let cell = document.createElement('div');
                 cell.classList.add('cell')
-                cell.innerText = pattern[i][j] == 1 ? '✅' :
-                    pattern[i][j] == 2 ? '❎' : ''
+                cell.innerText  =   pattern[i][j] == 1 ? '✅' :
+                                    pattern[i][j] == 2 ? '❎' : ''
                 cell.addEventListener('click', () => stroke(i, j))
                 board.appendChild(cell)
             }
