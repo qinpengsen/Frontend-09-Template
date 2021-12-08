@@ -1,16 +1,17 @@
 ## 学习笔记
+第一周：11月29号-12月5号
 
 ### Tictacoe
 > 一字旗
 
-疑问 
+**疑问 **
 - dispaly:inline 默认baseline 对齐？  
 - 三元表达式最佳实践
 - let声明最佳实践
 - 为啥要重新画一下
     - 如果不重新画多渲染多个cell
 
-设计思路
+**设计思路**
 - 先画出来
 - 落子
 - 判断是否赢了
@@ -19,7 +20,7 @@
 - 人机对战（机器走bestChoice）
 - 换成1维数组试试
 
-知识点
+**知识点**
 - 通过patter里面的数据的来渲染
 - vertical-align 用在 inline, inline-block and table-cell elements， 默认baselline 对齐，
 - 用1，2 代表你我方，用3来减就是对方，可以记录交替记录
@@ -35,7 +36,7 @@
 ### 红绿灯 异步编程
 > 红灯5秒，黄灯2秒，绿灯10秒，无限循环
 
-疑问
+**疑问**
 - callback-hell 和 时间处理函数有啥关系？为啥时间处理函数处理红绿灯问题就是callback-hell了？
     - https://www.freecodecamp.org/news/javascript-callback-functions-what-are-callbacks-in-js-and-how-to-use-them/
 - marign:0 auto 如何使用
@@ -45,11 +46,11 @@
 - for await of 是啥？
     - 和 async gennerator 相对应，用来循环使用
 
-知识点
+**知识点**
 - 无限循环最佳实践
 - Genereator 是啥？了解下即可
 
-JavaScript 异步机制
+**JavaScript 异步机制**
 - callBack
 - Promise
     - 存在的意义是啥？比如红绿灯要换成手动的控制，如果用callback就会很麻烦，Promise就很简单，把事件单独抽离出来了
