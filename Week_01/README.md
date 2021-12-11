@@ -1,6 +1,17 @@
 ## 学习笔记
 第一周：11月29号-12月5号
 
+### 目录
+- Tictactoe 1.thml  基本Ai实现
+- Tictactoe 2.thml  智能Ai实现，提示最好的选择
+- Tictactoe 1.thml  人机对战
+
+- Async 1.html 回调地狱
+- Async 2.html promise
+- Async 3.html promise 老师的写法
+- Async 4.html async
+- Async 5.html async 交警控制红绿灯
+
 ### Tictacoe
 > 一字旗
 

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #container {
+        /* 有个默认的行高1.2，所以必须得设置 */
+        line-height: 1px;
+        width: 700px;
+    }
+
+    .cell {
+        width: 6px;
+        height: 6px;
+        display: inline-block;
+        vertical-align: middle;
+        /* border: 1px solid gainsboro; */
+        background-color: gray;
+        border-bottom: solid 1px white;
+        border-right: solid 1px white;
+    }
+
+    .cell.lighten {
+        background: red;
+    }
+</style>
+
+<body>
+    <div id="container"></div>
+</body>
+<script>
+    // 2 部分：1个是地图，一个是绑定的数据（0 是没画，1是画了）
+    // 左击按下的时候画图，右击按下的时候擦除
+    let container = document.getElementById('container');
+    let map = localStorage.getItem('map') ? JSON.parse(localStorage.getItem('map')) : new Array(10000).fill(0)
+    for (let i = 0; i < 100; i++) {
+        for (let j = 0; j < 100; j++) {
+            let cell = document.createElement('div');
+            cell.dataset.ij = j + '-' + i
+            cell.addEventListener('mousemove', function () {
+                if (mousedown) {//虽然draw 在下面声明但是，因为这是异步
+                    if (clear) {
+                        cell.classList.remove('lighten')
+                        map[100 * i + j] = 0
+                    } else {
+                        // this.classList.add('lighten')  // 或者用cell
+                        cell.classList.add('lighten')
+                        map[100 * i + j] = 1
+                    }
+                    localStorage.setItem('map', JSON.stringify(map))
+                }
+            })
+            cell.classList.add('cell')
+            if (map[100 * i + j] == 1) {
+                cell.classList.add('lighten')
+            }
+            container.appendChild(cell)
+        }
+        /* 
+      下面  这里千万不能这样写，如果这样写，在下面寻路的时候也算一个子节点，我找了好久的问题啊，可以通过宽度来控制
+           container.children[y * 100 + x].style.backgroundColor = "lightgreen";
+        
+        */
+        // container.appendChild(document.createElement('br'))  //
+    }
+    let mousedown = false;
+    document.addEventListener('mousedown', function (e) {
+        clear = (e.button === 2); //2是右击，0是左击，1是中间的滚轮
+        mousedown = true;//按下的时候开始画了
+    })
+    document.addEventListener('mouseup', function () {
+        mousedown = false;//抬起的时候停止画了
+    })
+    let clear = false
+    document.addEventListener('contextmenu', function (e) {
+        e.preventDefault()
+        // clear = true;
+    })
+
+    function sleep(time) {
+        return new Promise(res => {
+            setTimeout(res, time)
+        })
+    }
+
+
+    // 寻路算法  广度优先
+    async function path(map, start, end) {
+        let queen = [start]
+
+
+        while (queen.length) {
+            let [x, y] = queen.shift()
+            if (x == end[0] && y == end[1]) {
+                return
+            }
+
+            await insert(x - 1, y)
+            await insert(x + 1, y)
+            await insert(x, y - 1)
+            await insert(x, y + 1)
+
+        }
+
+
+
+        async function insert(x, y) {
+            if (x < 0 || x >= 100 || y < 0 || y >= 100) {
+                return;
+            }
+            if (map[100 * y + x]) {// 有墙 也就是画过的地方 不走
+                return
+            }
+            await sleep(10)
+            map[100 * y + x] = 2//表示已经寻过
+            container.children[y * 100 + x].style.backgroundColor = "lightgreen";
+            // document.querySelectorAll('.cell')[map[100 * x + y]].style.background = 'green'
+
+            queen.push([x, y])
+
+        }
+
+    }
+
+
+    path(map, [0, 0], [50, 50])
+
+
+</script>
+
+</html>
