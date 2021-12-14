@@ -62,9 +62,7 @@
             container.appendChild(cell)
         }
         /* 
-      下面  这里千万不能这样写，如果这样写，在下面寻路的时候也算一个子节点，我找了好久的问题啊，可以通过宽度来控制
-           container.children[y * 100 + x].style.backgroundColor = "lightgreen";
-        
+            下面  这里千万不能这样写，如果这样写，在下面寻路的时候也算一个子节点，我找了好久的问题啊，可以通过宽度来控制
         */
         // container.appendChild(document.createElement('br'))  //
     }
@@ -110,15 +108,15 @@
 
 
         async function insert(x, y) {
-            if (x < 0 || x >= 100 || y < 0 || y >= 100) {
+            if (x < 0 || x > 100 || y < 0 || y > 100) {
                 return;
             }
             if (map[100 * y + x]) {// 有墙 也就是画过的地方 不走
                 return
             }
-            await sleep(10)
+            await sleep(1)
             map[100 * y + x] = 2//表示已经寻过
-            container.children[y * 100 + x].style.backgroundColor = "lightgreen";
+            container.children[y * 100 + x].style.backgroundColor = "green";
             // document.querySelectorAll('.cell')[map[100 * x + y]].style.background = 'green'
 
             queen.push([x, y])
@@ -128,7 +126,7 @@
     }
 
 
-    path(map, [0, 0], [50, 50])
+    path(map, [0, 0], [100, 100])
 
 
 </script>

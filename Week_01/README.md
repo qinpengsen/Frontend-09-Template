@@ -2,9 +2,9 @@
 第一周：11月29号-12月5号
 
 ### 目录
-- Tictactoe 1.thml  基本Ai实现
-- Tictactoe 2.thml  智能Ai实现，提示最好的选择
-- Tictactoe 1.thml  人机对战
+- Tictactoe 1.thml  二维数组，基本Ai实现
+- Tictactoe 2.thml  一维数组，智能Ai实现，提示最好的选择
+- Tictactoe 1.thml  一维数组，人机对战
 
 - Async 1.html 回调地狱
 - Async 2.html promise
