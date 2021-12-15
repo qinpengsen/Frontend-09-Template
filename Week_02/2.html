@@ -35,7 +35,7 @@
 </body>
 <script>
     // 2 部分：1个是地图，一个是绑定的数据（0 是没画，1是画了）
-    // 左击按下的时候画图，右击按下的时候擦除
+    // 左击按下的时候画图(画墙)，右击按下的时候擦除
     let container = document.getElementById('container');
     let map = localStorage.getItem('map') ? JSON.parse(localStorage.getItem('map')) : new Array(10000).fill(0)
     for (let i = 0; i < 100; i++) {
@@ -93,15 +93,26 @@
 
 
         while (queen.length) {
+            // debugger
             let [x, y] = queen.shift()
             if (x == end[0] && y == end[1]) {
                 return
             }
 
-            await insert(x - 1, y)
-            await insert(x + 1, y)
-            await insert(x, y - 1)
-            await insert(x, y + 1)
+            await insert(x - 1, y);
+            await insert(x, y - 1);
+            await insert(x + 1, y);
+            await insert(x, y + 1);
+
+
+
+
+
+
+            await insert(x + 1, y + 1);
+            await insert(x + 1, y - 1);
+            await insert(x - 1, y - 1);
+            await insert(x - 1, y + 1);
 
         }
 
@@ -114,9 +125,10 @@
             if (map[100 * y + x]) {// 有墙 也就是画过的地方 不走
                 return
             }
-            await sleep(1)
+            await sleep(10)
+            // debugger
             map[100 * y + x] = 2//表示已经寻过
-            container.children[y * 100 + x].style.backgroundColor = "green";
+            container.children[y * 100 + x].style.backgroundColor = "black";
             // document.querySelectorAll('.cell')[map[100 * x + y]].style.background = 'green'
 
             queen.push([x, y])
@@ -126,7 +138,7 @@
     }
 
 
-    path(map, [0, 0], [100, 100])
+    path(map, [0, 0], [50, 50])
 
 
 </script>
