@@ -46,11 +46,11 @@
                 if (mousedown) {//虽然draw 在下面声明但是，因为这是异步
                     if (clear) {
                         cell.classList.remove('lighten')
-                        map[100 * i + j] = 0
+                        map[100 * i + j] = 0  // 空白
                     } else {
                         // this.classList.add('lighten')  // 或者用cell
                         cell.classList.add('lighten')
-                        map[100 * i + j] = 1
+                        map[100 * i + j] = 1  // 有墙
                     }
                     localStorage.setItem('map', JSON.stringify(map))
                 }
@@ -87,48 +87,67 @@
     }
 
     // 寻路算法  广度优先
-    async function path(map, start, end) {
+    async function findPath(map, start, end) {
+        // let queenCopy = Object.create(map)
         let queen = [start]
-        // debugger
 
         while (queen.length) {
-            // debugger
             let [x, y] = queen.shift()
             if (x == end[0] && y == end[1]) {
-                return 
+                // let [x1, y1] = [x, y]
+                let path = [];
+                while (!(x == start[0] && y == start[0])) {
+                    // [x1, y1] = queenCopy[100 * y1 + x1]
+
+                    // debugger
+                    await sleep(10)
+                    container.children[y * 100 + x].style.backgroundColor = "black";
+                    // path.push([x1, y1])
+
+
+                    path.push(map[y * 100 + x]);
+                    [x, y] = map[y * 100 + x];
+                    await sleep(10);
+                }
+                // console.log(path);
+                return path
             }
-            await insert(x - 1, y);
-            await insert(x, y - 1);
-            await insert(x + 1, y);
-            await insert(x, y + 1);
+            await insert(x - 1, y, [x, y]);
+            await insert(x, y - 1, [x, y]);
+            await insert(x + 1, y, [x, y]);
+            await insert(x, y + 1, [x, y]);
             // 斜向
-            await insert(x + 1, y + 1);
-            await insert(x + 1, y - 1);
-            await insert(x - 1, y - 1);
-            await insert(x - 1, y + 1);
+            await insert(x + 1, y + 1, [x, y]);
+            await insert(x + 1, y - 1, [x, y]);
+            await insert(x - 1, y - 1, [x, y]);
+            await insert(x - 1, y + 1, [x, y]);
         }
 
-        async function insert(x, y) {
+        async function insert(x, y, pre) {
             if (x < 0 || x > 100 || y < 0 || y > 100) {
                 return;
             }
             if (map[100 * y + x]) {// 有墙 也就是画过的地方 不走
                 return
             }
-            await sleep(1)
-            // debugger
-            map[100 * y + x] = 2//表示已经寻过
-            container.children[y * 100 + x].style.backgroundColor = "black";
+            // queenCopy[100 * y + x] = pre
+            // await sleep(1)
+            // map[100 * y + x] = 2//表示已经寻过
+            map[100 * y + x] = pre//表示已经寻过 ，这里因为要把路径给画出来，所以这里存成了上个的节点
+            container.children[y * 100 + x].style.backgroundColor = "green";
             // document.querySelectorAll('.cell')[map[100 * x + y]].style.background = 'green'
 
             queen.push([x, y])
 
         }
 
+
+        return
+
     }
 
 
-    // path(map, [0, 0], [50, 50])
+    findPath(map, [0, 0], [50, 50])
 
 
 </script>
