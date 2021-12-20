@@ -34,6 +34,41 @@
     <div id="container"></div>
 </body>
 <script>
+    //  启发式寻路,用来代替广发式寻路的push和pop，每次都返回一个最小的值
+    class Sort {
+        constructor(data, compare) {
+            this.data = data.slice()//保存数据
+            this.compare = compare || ((x, y) => x - y)
+        }
+        // 取的操作，代替 pop
+        take() {
+            if (!this.data.length) {
+                return
+            }
+            let minV = this.data[0];
+            let mivIndex = 0;
+            for (let i = 1; i < this.data.length; i++) {
+                // if (this.data[i] < minV) {
+                // debugger
+                if (this.compare(this.data[i], minV) < 0) {
+                    mivIndex = i
+                    minV = this.data[i]
+                }
+            }
+            // 拿出来之后，要少个数据，splice 复杂度 是0（n），消耗比较大，可以用下面的，复杂度是 O（1）
+            this.data[mivIndex] = this.data[this.data.length - 1];
+            this.data.pop()
+            return minV
+        }
+        // 存的操作，代替 push
+        give(v) {
+            this.data.push(v)
+
+        }
+
+    }
+
+
     // 2 部分：1个是地图，一个是绑定的数据（0 是没画，1是画了）
     // 左击按下的时候画图(画墙)，右击按下的时候擦除
     let container = document.getElementById('container');
@@ -89,10 +124,18 @@
     // 寻路算法  广度优先
     async function findPath(map, start, end) {
         // let queenCopy = Object.create(map)
-        let queen = [start]
+        // 开方 不开方 不影响大小
+        // debugger
 
-        while (queen.length) {
-            let [x, y] = queen.shift()
+        function distance(point) {
+            return (end[0] - point[0]) ** 2 + (end[1] - point[1]) ** 2
+        }
+
+        // let queen = [start]
+        let queen = new Sort([start], (a, b) => distance(a) - distance(b))
+        console.log(queen);
+        while (queen.data.length) {
+            let [x, y] = queen.take()
             if (x == end[0] && y == end[1]) {
                 // let [x1, y1] = [x, y]
                 let path = [];
@@ -100,7 +143,7 @@
                     // [x1, y1] = queenCopy[100 * y1 + x1]
 
                     // debugger
-                    await sleep(10)
+                    // await sleep(10)
                     container.children[y * 100 + x].style.backgroundColor = "black";
                     // path.push([x1, y1])
 
@@ -109,7 +152,8 @@
                     [x, y] = map[y * 100 + x];
                     await sleep(10);
                 }
-                console.log('总步数',path.length);
+                // console.log(path);
+                // console.log('总步数', path.length);
                 return path
             }
             await insert(x - 1, y, [x, y]);
@@ -131,13 +175,13 @@
                 return
             }
             // queenCopy[100 * y + x] = pre
-            // await sleep(1)
+            await sleep(1)
             // map[100 * y + x] = 2//表示已经寻过
             map[100 * y + x] = pre//表示已经寻过 ，这里因为要把路径给画出来，所以这里存成了上个的节点
             container.children[y * 100 + x].style.backgroundColor = "green";
             // document.querySelectorAll('.cell')[map[100 * x + y]].style.background = 'green'
 
-            queen.push([x, y])
+            queen.give([x, y])
 
         }
 
