@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+<script>
+    // 1.暴力算法
+    function search(pat, source) {
+        let P = pat.length;
+        let S = source.length;
+        for (let i = 0; i <= S - P; i++) {
+            let j;
+            for (j = 0; j < P; j++) {
+                if (pat[j] != source[i + j])
+                    break;
+            }
+            // pat 全都匹配了
+            if (j == P) return i;
+        }
+        // source 中不存在 pat 子串
+        return -1;
+    }
+    console.log(search('aaab', 'aaacaaab'))
+    // source = "aaacaaab" pat = "aaab"：
+
+
+
+
+
+    //2 kmp 算法
+    function kmp(source, pattern) {
+
+        // 计算跳转表格
+        let table = new Array(pattern.length).fill(0);
+        // 检查字符串中有没有自重复
+        {
+            let i = 1,//自重复开始的位置
+                j = 0;//最长公共前后缀
+
+            while (i < pattern.length) {
+                if (pattern[i] === pattern[j]) {
+                    // 匹配的情况
+                    ++j, ++i;
+                    if (i >= pattern.length) {
+                        break;
+                    }
+                    table[i] = j;
+                } else {
+                    if (j > 0) {
+                        j = table[j];
+                    } else {
+                        ++i;
+                    }
+                }
+            }
+        }
+        console.log(table);
+
+        // 匹配跳转表格
+        // {
+        //     let i = 0,
+        //         j = 0;
+        //     while (i < source.length) {
+        //         if (j === pattern.length) {
+        //             return true;
+        //         }
+
+        //         if (pattern[j] === source[i]) {
+        //             ++i, ++j;
+        //         } else {
+        //             if (j > 0) {
+        //                 j = table[j];
+        //             } else {
+        //                 ++i;
+        //             }
+        //         }
+        //     }
+
+        //     return false;
+        // }
+    }
+
+    console.log(kmp("", "aabaaac"));
+</script>
+
+</html>
