@@ -16,6 +16,7 @@
     function search(pat, source) {
         let P = pat.length;
         let S = source.length;
+        // 注意这里一定是小于等于，因为要算匹配到的字母的起始位置
         for (let i = 0; i <= S - P; i++) {
             let j;
             for (j = 0; j < P; j++) {
@@ -28,17 +29,16 @@
         // source 中不存在 pat 子串
         return -1;
     }
-    console.log(search('aaab', 'aaacaaab'))
-    // source = "aaacaaab" pat = "aaab"：
+    // console.log(search('aaab', 'aaacaaab'))   //4
 
 
 
 
 
-    //2 kmp 算法
+    //2 kmp 算法 老师
     function kmp(source, pattern) {
 
-        // 计算跳转表格
+        // 计算跳转表格 - 前缀表 prefix [],
         let table = new Array(pattern.length).fill(0);
         // 检查字符串中有没有自重复
         {
@@ -46,7 +46,7 @@
                 j = 0;//最长公共前后缀
 
             while (i < pattern.length) {
-                if (pattern[i] === pattern[j]) {    
+                if (pattern[i] === pattern[j]) {
                     // 匹配的情况
                     ++j, ++i;
                     if (i >= pattern.length) {
@@ -62,7 +62,7 @@
                 }
             }
         }
-        console.log(table);
+        console.log('table', table);
 
         // 匹配跳转表格
         // {
@@ -88,7 +88,35 @@
         // }
     }
 
-    console.log(kmp("", "aabaaac"));
+    // youtube 
+    function kmp1(source, pattern) {
+        // 计算跳转表格 - 前缀表 prefix [],
+        let prefix = new Array(pattern.length).fill(0);
+        let len = 0;
+        let i = 1;
+        while (i < pattern.length) {
+            if (pattern[i] == pattern[len]) {
+                len++;
+                prefix[i] = len
+                i++;
+            } else {
+                if (len > 0)
+                    len = prefix[len - 1]
+                else
+                    // pre[i] = len;//这里估计可以去掉。因为一开始都填充0了
+                    i++;
+            }
+        }
+
+        console.log('prefix', prefix)
+
+    }
+
+    kmp("", "aabaaac")
+    kmp1("", "aabaaac")
+
+
+
 </script>
 
 </html>
