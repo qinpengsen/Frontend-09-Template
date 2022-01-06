@@ -26,10 +26,37 @@
         - a b a b c（-1 0 0 1 2）
         - a a a a b(-1 0 1 2 3) 
             - a           0
-            - a a         1   一定比当前字符串前缀表段,所以不是2，下面一样
+            - a a         1   一定比当前字符串前缀表段小,所以不是2，下面一样
             - a a a       2
             - a a a a     3
-            - a a a a b   最后一个不要，前面在 补个 -1，也是也可以看作每个字母之前的
+            - a a a a b   0 
+    ```
+     let prefix = new Array(pattern.length).fill(0);
+        let len = 0;
+        let i = 1;
+        while (i < pattern.length) {
+            if (pattern[i] == pattern[len]) {
+                len++;
+                prefix[i] = len
+                i++;
+            } else {
+                if (len > 0)
+                    len = prefix[len - 1]
+                else
+                    // pre[i] = len;//这里估计可以去掉。因为一开始都填充0了
+                    i++;
+            }
+        }
+        console.log('prefix', prefix)
+    ```
+    - 最长公共前后缀调整，（最后一个不要，前面在 补个 -1，也是也可以看作每个字母往后移动一位，第一位补-1，代码实战2.html有个操作专门处理这块的）
+    ```
+     for (let i = 0; i < prefix.length; i++) {
+            prefix[i] = prefix[i + 1]
+        }
+        prefix[0] = -1
+    ```
+
 - Wildcard
     - 包含通配符的字符串模式匹配
 - 正则表达式

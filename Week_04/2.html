@@ -65,55 +65,95 @@
         console.log('table', table);
 
         // 匹配跳转表格
-        // {
-        //     let i = 0,
-        //         j = 0;
-        //     while (i < source.length) {
-        //         if (j === pattern.length) {
-        //             return true;
-        //         }
+        {
+            let i = 0,
+                j = 0;
+            while (i < source.length) {
+                if (j === pattern.length) {
+                    return true;
+                }
 
-        //         if (pattern[j] === source[i]) {
-        //             ++i, ++j;
-        //         } else {
-        //             if (j > 0) {
-        //                 j = table[j];
-        //             } else {
-        //                 ++i;
-        //             }
-        //         }
-        //     }
+                if (pattern[j] === source[i]) {
+                    ++i, ++j;
+                } else {
+                    if (j > 0) {
+                        j = table[j];
+                    } else {
+                        ++i;
+                    }
+                }
+            }
 
-        //     return false;
-        // }
+            return false;
+        }
     }
 
-    // youtube 
+    //3 kmp 算法  youtube  结合老师的
     function kmp1(source, pattern) {
-        // 计算跳转表格 - 前缀表 prefix [],
+        // 1、计算前缀表 prefix table
         let prefix = new Array(pattern.length).fill(0);
-        let len = 0;
-        let i = 1;
-        while (i < pattern.length) {
-            if (pattern[i] == pattern[len]) {
-                len++;
-                prefix[i] = len
-                i++;
-            } else {
-                if (len > 0)
-                    len = prefix[len - 1]
-                else
-                    // pre[i] = len;//这里估计可以去掉。因为一开始都填充0了
+        {
+
+            let len = 0;
+            let i = 1;
+            while (i < pattern.length) {
+                if (pattern[i] == pattern[len]) {
+                    len++;
+                    prefix[i] = len
                     i++;
+                } else {
+                    if (len > 0)
+                        len = prefix[len - 1]
+                    else
+                        // pre[i] = len;//这里估计可以去掉。因为一开始都填充0了
+                        i++;
+                }
             }
+            console.log('prefix', JSON.parse(JSON.stringify(prefix)))
         }
 
-        console.log('prefix', prefix)
 
+
+        //2、移动prefix，现在第一个默认是0，应该所有的都往右移位，第一个默认-1
+        {
+            // for (let i = 0; i < prefix.length; i++) {
+            //     prefix[i] = prefix[i - 1]
+            // } //这样写 都是 undefined
+            for (let i = prefix.length - 1; i > 0; i--) {
+                prefix[i] = prefix[i - 1]
+            }
+            prefix[0] = -1
+            console.log('移动后的prefix', prefix)
+        }
+
+
+        //3、开始用prefix table，进行跳转
+        {
+            let m = source.length;
+            let n = pattern.length;
+            let i = 0;//source 的目前匹配位置
+            let j = 0;//pattern 的目前匹配位置
+            while (i < m) {
+                if (j == n - 1 && pattern[j] == source[i]) {
+                    console.log("发现 pattern 在 ", i - j)
+                    j = prefix[j]
+                }
+                if (source[i] == pattern[j]) {
+                    i++;
+                    j++;
+                } else {
+                    j = prefix[j]
+                    if (j == -1) {
+                        i++;
+                        j++;
+                    }
+                }
+            }
+        }
     }
 
-    kmp("", "aabaaac")
-    kmp1("", "aabaaac")
+    // kmp("aaabaaac", "aabaaac")
+    kmp1("aaabaaac", "aabaaac")
 
 
 

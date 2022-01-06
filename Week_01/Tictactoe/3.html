@@ -45,7 +45,7 @@
                 let cell = document.createElement('div');
                 cell.classList.add('cell')
                 cell.innerText = pattern[i * 3 + j] == 1 ? '✅' :
-                    pattern[i * 3 + j] == 2 ? '❎' : ''
+                                 pattern[i * 3 + j] == 2 ? '❎' : ''
                 cell.addEventListener('click', () => userStroke(i, j))
                 board.appendChild(cell)
             }
