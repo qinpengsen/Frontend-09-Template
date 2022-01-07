@@ -3,7 +3,7 @@
 
 ## 目录
 - 1.html  字典树
-- 2.thml  kmp 
+- 2.thml  kmp （推荐肯youtobe的那个写法和视频）
 - 3.html  
 - 4.html 
 

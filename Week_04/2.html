@@ -32,9 +32,6 @@
     // console.log(search('aaab', 'aaacaaab'))   //4
 
 
-
-
-
     //2 kmp 算法 老师
     function kmp(source, pattern) {
 
@@ -94,8 +91,8 @@
         let prefix = new Array(pattern.length).fill(0);
         {
 
-            let len = 0;
-            let i = 1;
+            let len = 0;//目前的最长公共前后缀
+            let i = 1;//从1开始找，因为从0的话，就只有1位，最长公共前后缀有不能大于目前的长度1位，所以从1开始
             while (i < pattern.length) {
                 if (pattern[i] == pattern[len]) {
                     len++;
@@ -105,7 +102,7 @@
                     if (len > 0)
                         len = prefix[len - 1]
                     else
-                        // pre[i] = len;//这里估计可以去掉。因为一开始都填充0了
+                        // pre[i] = len;//这里估计可以去掉。因为一开始都填充0了，上面的操作也弄成了0
                         i++;
                 }
             }
@@ -152,7 +149,7 @@
         }
     }
 
-    // kmp("aaabaaac", "aabaaac")
+    kmp("aaabaaac", "aabaaac")
     kmp1("aaabaaac", "aabaaac")
 
 
