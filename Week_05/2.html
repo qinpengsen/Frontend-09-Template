@@ -1,0 +1,21 @@
+<script>
+    let object = {
+        a: 1,
+        b: 2
+    }
+
+    function reactive(object) {
+        return new Proxy(object, {
+            set(obj, key, val) {
+                obj[key] = val;
+                console.log(obj, key, val);
+                return false
+            },
+            get(obj, key, val) {
+                console.log(key, val);
+                return obj[key]
+            }
+        })
+    }
+    let po = reactive(object)
+</script>
