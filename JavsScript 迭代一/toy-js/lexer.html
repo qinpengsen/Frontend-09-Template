@@ -1,0 +1,17 @@
+<script>
+    function scan(str) {
+        let reg = / |\n|\/\*([^*]|\*[^/])*\*\//g
+        while (reg.lastIndex < str.length) {
+            let r = reg.exec(str)
+            console.log(r);
+        }
+    }
+
+    scan(`
+    /*hello world*/
+    /*Pension*/
+
+    `)
+
+
+</script>
